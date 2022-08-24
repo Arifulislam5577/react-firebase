@@ -7,11 +7,13 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="row row-cols-2 row-cols-lg-4 g-3">
-        <Loader />
-        <Loader />
-        <Loader />
-        <Loader />
+      <div className="container">
+        <div className="row row-cols-2 row-cols-lg-4 g-3 py-5">
+          <Loader />
+          <Loader />
+          <Loader />
+          <Loader />
+        </div>
       </div>
     );
   } else if (products.length <= 0) {

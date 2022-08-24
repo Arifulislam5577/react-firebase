@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { GiShoppingBag } from "react-icons/gi";
 import { FiShoppingCart } from "react-icons/fi";
+import { FaUserAlt, FaRegUserCircle } from "react-icons/fa";
 import { BsSearch } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { DataContext } from "../contextApi/contextApi";
 const Navbar = () => {
-  const { cart, searchTerm, setSearchTerm, handleSubmit } =
+  const { cart, searchTerm, setSearchTerm, handleSubmit, user } =
     useContext(DataContext);
   const totalProducts = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -46,6 +47,21 @@ const Navbar = () => {
             <span>-</span>
             <span className="">{totalProducts}</span>
           </Link>
+          {user ? (
+            <Link
+              className="btn btn-secondary rounded-0 text-light d-flex align-items-center"
+              to="/profile"
+            >
+              <FaRegUserCircle />
+            </Link>
+          ) : (
+            <Link
+              className="btn btn-secondary rounded-0 text-light d-flex align-items-center"
+              to="/login"
+            >
+              <FaUserAlt />
+            </Link>
+          )}
         </div>
       </div>
     </nav>
