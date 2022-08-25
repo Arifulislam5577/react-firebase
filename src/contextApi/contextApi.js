@@ -10,14 +10,12 @@ const DataProvider = ({ children }) => {
   const cartItems = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
-  const userFromStore = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
-    : null;
+
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState(cartItems);
   const [searchTerm, setSearchTerm] = useState("");
-  const [user, setUser] = useState(userFromStore);
+  const [user, setUser] = useState(null);
 
   const findProductById = (id, arr) => arr.find((product) => product.id === id);
 
@@ -45,7 +43,6 @@ const DataProvider = ({ children }) => {
 
   const quantityManager = (id, operator) => {
     const product = findProductById(id, cart);
-
     if (operator === "plus") {
       product.quantity = product.quantity + 1;
       setCart([...cart]);
@@ -75,10 +72,10 @@ const DataProvider = ({ children }) => {
     setSearchTerm(searchTerm);
   };
 
+  // LOGOUT USER
   const logoutUser = () => {
     signOut(auth);
     setUser(null);
-    localStorage.removeItem("user");
   };
 
   //USER LOGIN OR NOT
@@ -86,10 +83,8 @@ const DataProvider = ({ children }) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
       } else {
         setUser(null);
-        localStorage.removeItem("user");
       }
     });
   }, []);

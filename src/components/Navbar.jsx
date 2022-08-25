@@ -48,16 +48,16 @@ const Navbar = () => {
             <span className="">{totalProducts}</span>
           </Link>
           {user ? (
-            <div class="dropdown">
+            <div className="dropdown">
               <button
-                class="btn btn-secondary dropdown-toggle rounded-0 text-light"
+                className="btn btn-secondary dropdown-toggle rounded-0 text-light"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 PROFILE
               </button>
-              <ul class="dropdown-menu rounded-0 bg-primary p-2">
+              <ul className="dropdown-menu rounded-0 bg-primary p-2">
                 <li className="py-3">
                   <Link
                     className="text-decoration-none rounded-0 text-light d-flex align-items-center justify-content-center gap-2"

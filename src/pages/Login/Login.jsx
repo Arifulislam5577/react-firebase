@@ -1,9 +1,15 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import React, { useContext, useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../auth/firebase";
+import { DataContext } from "../../contextApi/contextApi";
 const Login = () => {
+  const { user, setLoading, loading } = useContext(DataContext);
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -16,8 +22,9 @@ const Login = () => {
     } else {
       setMessage("");
       try {
+        setLoading(true);
         await signInWithEmailAndPassword(auth, email, password);
-        setMessage("Welcome Login Success!");
+        setLoading(false);
         setEmail("");
         setPassword("");
       } catch (error) {
@@ -25,6 +32,23 @@ const Login = () => {
       }
     }
   };
+
+  const googleProvider = new GoogleAuthProvider();
+
+  const signInGoogle = async () => {
+    await signInWithPopup(auth, googleProvider);
+  };
+
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const redirectInUrl = new URLSearchParams(search).get("redirect");
+  const redirect = redirectInUrl ? redirectInUrl : "/";
+
+  useEffect(() => {
+    if (user) {
+      navigate(redirect);
+    }
+  }, [user, navigate, redirect]);
   return (
     <section className="py-5">
       <div className="container">
@@ -65,15 +89,20 @@ const Login = () => {
             <div className="mb-2">
               <button
                 type="submit"
-                className="btn btn-primary btn-block btn-lg w-100 rounded-0"
+                className={`btn ${
+                  loading ? "btn-light text-primary" : "btn-primary"
+                } btn-block btn-lg w-100 rounded-0`}
               >
-                Login
+                {loading ? "Loading..." : "Login"}
               </button>
             </div>
 
             <p className="text-center my-2 text-muted">OR</p>
             <div className="d-flex align-items-center justify-content-center">
-              <button className="btn btn-light d-flex align-items-center text-center  justify-content-center gap-2 w-100 rounded-0 p-2">
+              <button
+                className="btn btn-light d-flex align-items-center text-center  justify-content-center gap-2 w-100 rounded-0 p-2"
+                onClick={signInGoogle}
+              >
                 <span className="d-flex align-items-center  justify-content-center">
                   <FcGoogle size="1.5rem" />
                 </span>
@@ -83,7 +112,8 @@ const Login = () => {
               </button>
             </div>
             <p className="text-muted text-center mt-2">
-              Create a new account <Link to="/signin">Signin</Link>
+              Create a new account
+              <Link to={`/signin?redirect=${redirect}`}>Signin</Link>
             </p>
           </form>
         </div>

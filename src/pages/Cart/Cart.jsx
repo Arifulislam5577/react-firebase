@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import { DataContext } from "../../contextApi/contextApi";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Cart = () => {
+  const navigate = useNavigate();
   const { cart, quantityManager, productRemoveFromCart, clearCart } =
     useContext(DataContext);
   const totalProducts = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -14,6 +15,10 @@ const Cart = () => {
 
   const tax = () => Math.round(productPrice * 0.1);
   const shipping = () => (productPrice > 500 ? 0 : 50);
+
+  const handleCheck = () => {
+    navigate("/login?redirect=/order");
+  };
 
   return (
     <section className="py-5">
@@ -140,12 +145,12 @@ const Cart = () => {
                   >
                     CLEAR CART
                   </button>
-                  <Link
-                    to="/order"
+                  <button
+                    onClick={handleCheck}
                     className="btn btn-primary rounded-0 w-50 btn-lg"
                   >
                     ORDER NOW
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
