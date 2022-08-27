@@ -5,8 +5,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const navigate = useNavigate();
-  const { cart, quantityManager, productRemoveFromCart, clearCart } =
-    useContext(DataContext);
+  const { state, dispatch } = useContext(DataContext);
+  const { cart } = state;
   const totalProducts = cart.reduce((acc, item) => acc + item.quantity, 0);
   const productPrice = cart.reduce(
     (acc, item) => acc + item.quantity * item.price,
@@ -65,9 +65,15 @@ const Cart = () => {
                           <button
                             className="btn btn-light btn-sm"
                             onClick={() => {
-                              quantityManager(product.id, "minus");
-                              if (product.quantity <= 0) {
-                                productRemoveFromCart(product.id);
+                              dispatch({
+                                type: "HANDLE_PRODUCT_QUANTITY",
+                                payload: { id: product.id, operator: "minus" },
+                              });
+                              if (product.quantity <= 1) {
+                                dispatch({
+                                  type: "REMOVE_ITEM",
+                                  payload: product.id,
+                                });
                               }
                             }}
                           >
@@ -77,7 +83,12 @@ const Cart = () => {
 
                           <button
                             className="btn btn-light btn-sm"
-                            onClick={() => quantityManager(product.id, "plus")}
+                            onClick={() =>
+                              dispatch({
+                                type: "HANDLE_PRODUCT_QUANTITY",
+                                payload: { id: product.id, operator: "plus" },
+                              })
+                            }
                           >
                             <AiOutlinePlus />
                           </button>
@@ -88,7 +99,12 @@ const Cart = () => {
                         <td>
                           <button
                             className="btn btn-light btn-sm"
-                            onClick={() => productRemoveFromCart(product.id)}
+                            onClick={() =>
+                              dispatch({
+                                type: "REMOVE_ITEM",
+                                payload: product.id,
+                              })
+                            }
                           >
                             <FaRegTrashAlt />
                           </button>
@@ -141,7 +157,7 @@ const Cart = () => {
                 <div className="flex align-items-center w-100 justify-centent-between gap-3">
                   <button
                     className="btn btn-secondary text-white rounded-0 w-50 btn-lg"
-                    onClick={() => clearCart()}
+                    onClick={() => dispatch({ type: "CLEAR_CART" })}
                   >
                     CLEAR CART
                   </button>

@@ -9,12 +9,13 @@ import {
 } from "firebase/auth";
 import { DataContext } from "../../contextApi/contextApi";
 const SignIn = () => {
+  const [loading, setLoading] = useState(false);
   let [email, setEmail] = useState("");
   let [confirmEmail, setConfirmEmail] = useState("");
   let [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const { user, setLoading, loading } = useContext(DataContext);
-
+  const { state } = useContext(DataContext);
+  const { user } = state;
   // SIGNIN WITH EMAIL AND PASSWORD
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -9,7 +9,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../auth/firebase";
 import { DataContext } from "../../contextApi/contextApi";
 const Login = () => {
-  const { user, setLoading, loading } = useContext(DataContext);
+  const { state } = useContext(DataContext);
+  let { user } = state;
+  let [loading, setLoading] = useState(false);
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   const [message, setMessage] = useState("");

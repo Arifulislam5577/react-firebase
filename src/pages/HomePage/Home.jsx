@@ -3,9 +3,9 @@ import Loader from "../../components/Loader";
 import Product from "../../components/Product";
 import { DataContext } from "../../contextApi/contextApi";
 const Home = () => {
-  const { loading, products } = useContext(DataContext);
-
-  if (loading) {
+  const { state } = useContext(DataContext);
+  const { loading, products } = state;
+  if (loading || products.length <= 0) {
     return (
       <div className="container">
         <div className="row row-cols-2 row-cols-lg-4 g-3 py-5">
@@ -14,15 +14,6 @@ const Home = () => {
           <Loader />
           <Loader />
         </div>
-      </div>
-    );
-  } else if (products.length <= 0) {
-    return (
-      <div className=" my-5 text-center">
-        <h1 className="text-uppercase fw-bold fs-3 text-center">
-          No Product
-          <span className="text-secondary">&nbsp;Found!</span>
-        </h1>
       </div>
     );
   } else {

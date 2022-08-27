@@ -2,13 +2,15 @@ import React, { useContext } from "react";
 import { GiShoppingBag } from "react-icons/gi";
 import { FiShoppingCart, FiLogIn } from "react-icons/fi";
 import { FaUserAlt, FaRegUserCircle } from "react-icons/fa";
-import { BsSearch } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { DataContext } from "../contextApi/contextApi";
 const Navbar = () => {
-  const { cart, searchTerm, setSearchTerm, handleSubmit, user, logoutUser } =
-    useContext(DataContext);
-  const totalProducts = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const { state, dispatch } = useContext(DataContext);
+  const totalProducts = state.cart.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
+  const { user } = state;
 
   return (
     <nav className="navbar navbar-expand-lg bg-primary p-3 shadow sticky-top">
@@ -23,22 +25,6 @@ const Navbar = () => {
           </Link>
         </div>
         <div className=" d-flex justify-content-end gap-2">
-          <form className="d-flex" role="search" onSubmit={handleSubmit}>
-            <input
-              className="form-control me-2 rounded-0 bg-light"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button
-              className="btn btn-secondary rounded-0 text-light d-flex align-items-center"
-              type="submit"
-            >
-              <BsSearch />
-            </button>
-          </form>
           <Link
             className="btn btn-secondary rounded-0 text-light d-flex align-items-center gap-1"
             to="/cart"
@@ -70,7 +56,7 @@ const Navbar = () => {
                 <li>
                   <button
                     className="btn btn-danger w-100 rounded-0 text-light d-flex align-items-center justify-content-center gap-2"
-                    onClick={() => logoutUser()}
+                    onClick={() => dispatch({ type: "LOGOUT_USER" })}
                   >
                     <FiLogIn />
                     Logout

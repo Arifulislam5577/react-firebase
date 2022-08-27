@@ -3,7 +3,9 @@ import { DataContext } from "../contextApi/contextApi";
 
 const Product = ({ product }) => {
   const { id, title, price, image } = product;
-  const { addToCart, cart } = useContext(DataContext);
+  const { state, dispatch } = useContext(DataContext);
+  const { cart } = state;
+
   return (
     <div className="col">
       <div
@@ -28,7 +30,7 @@ const Product = ({ product }) => {
             <h6 className="fw-bold text-secondary">${price}</h6>
             <button
               className="btn btn-primary btn-sm  text-capitalize fs-6"
-              onClick={() => addToCart(id)}
+              onClick={() => dispatch({ type: "ADD_TO_CART", payload: id })}
               disabled={cart.find((pd) => pd.id === id)}
             >
               {cart.find((pd) => pd.id === id) ? "In Cart" : "add to cart"}

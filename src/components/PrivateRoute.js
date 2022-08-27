@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 import { DataContext } from "../contextApi/contextApi";
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useContext(DataContext);
-  return user ? children : <Navigate to="/login" />;
+  const { state } = useContext(DataContext);
+  return state.user ? children : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
